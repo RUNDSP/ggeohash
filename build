@@ -1,0 +1,39 @@
+#!/bin/sh
+
+export GOPATH=$PWD/
+
+# Abort on errors after this point ...
+set -e
+
+# Cleanout the bin folder
+mkdir -p ./bin
+rm -f ./bin/*
+
+# Make sure the dependencies are setup
+# Import the script into this namespace
+. ./configure
+
+# Cleanup and format the code
+# This will break on any syntax errors
+
+echo ""
+echo ".................................................................."
+echo "Formatting the code .............................................."
+echo ".................................................................."
+gofmt -s -w $GOPATH/
+echo ""
+
+# Build the app
+echo ".................................................................."
+echo "Building GGeoHash CLI ............................................"
+echo ".................................................................."
+go build ./cli/ggeohash_cli.go || exit $?
+mv -fv ./ggeohash_cli ./bin/ggeohash_cli
+chmod -R 777 ./bin
+
+echo ""
+echo ".................................................................."
+echo "Built Server & CLI's: ............................................"
+echo ".................................................................."
+ls -1 ./bin/*
+echo ""
